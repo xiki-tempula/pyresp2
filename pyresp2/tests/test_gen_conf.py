@@ -10,7 +10,7 @@ class TestGenerate_conformers():
     @staticmethod
     @pytest.fixture(scope='class')
     def run():
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(inline_comment_prefixes="#")
         config.read(resource_filename(__name__,
                                               '../default.ini'))
         generate_conformers(resource_filename(__name__,

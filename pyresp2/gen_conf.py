@@ -1,5 +1,5 @@
 import os
-from subprocess import call
+import subprocess
 import MDAnalysis
 import numpy as np
 
@@ -28,6 +28,15 @@ def generate_conformers(mol, config):
     _check_charge(mol, charge)
     os.makedirs('crest', exist_ok=True)
     # Call xtb to do an initial round of optimisation
-    call('{xtb} {mol} --opt --aplb h2o --parallel {n_proc} --namespace crest/opt'.format(
-        xtb=config['bin_path']['xtb'], mol=mol,
-        n_proc=config['global']['n_proc']), shell=True)
+    with open('crest/initial_opt.log', 'w') as f:
+        cmd = '{xtb} {mol} --opt --aplb h2o --parallel {n_proc} --namespace crest/opt'.format(
+            xtb=config['bin_path']['xtb'], mol=mol,
+            n_proc=config['global']['n_proc'])
+        f.write('''The initial xtb optimisation input is:
+==============================================================================
+{}
+==============================================================================
+The initial xtb optimisation output is:
+'''.format(cmd))
+        subprocess.call(cmd, shell=True, stdout=f,
+            stderr=subprocess.STDOUT)
