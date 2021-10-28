@@ -9,7 +9,7 @@ from pyresp2.gen_conf import generate_conformers
 class TestGenerate_conformers():
     @staticmethod
     @pytest.fixture(scope='class')
-    def workflow():
+    def run():
         config = configparser.ConfigParser()
         config.read(resource_filename(__name__,
                                               '../default.ini'))
@@ -17,6 +17,7 @@ class TestGenerate_conformers():
                                               'test_data/butane.pdb'),
                             config)
 
-    def test_opt(self):
+    def test_opt(self, run):
         # Test if the initial xtb optimisation works.
-        assert os.path.isfile(resource_filename(__name__,'xtbopt.pdb'))
+        assert os.path.isfile(resource_filename(__name__,
+                                                'crest/opt.xtbopt.pdb'))

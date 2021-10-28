@@ -26,8 +26,8 @@ def generate_conformers(mol, config):
                          'extension {}.'.format(ext))
     # Sanity check
     _check_charge(mol, charge)
-
+    os.makedirs('crest', exist_ok=True)
     # Call xtb to do an initial round of optimisation
-    call('{xtb} {mol} --opt --aplb h2o --parallel {n_proc}'.format(
+    call('{xtb} {mol} --opt --aplb h2o --parallel {n_proc} --namespace crest/opt'.format(
         xtb=config['bin_path']['xtb'], mol=mol,
         n_proc=config['global']['n_proc']), shell=True)
