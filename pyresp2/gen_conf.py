@@ -62,3 +62,5 @@ The initial xtb optimisation output is:
     with open('pyresp2_1_crest.log', 'a+') as f:
         subprocess.call(cmd, shell=True, stdout=f, stderr=f)
 
+    shutil.copy('crest_conformers.xyz', 'crest')
+

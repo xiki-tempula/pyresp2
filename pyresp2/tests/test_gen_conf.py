@@ -21,3 +21,7 @@ class TestGenerate_conformers():
     def test_opt(self, run):
         # Test if the initial xtb optimisation works.
         assert os.path.isfile('crest/opt.xtbopt.pdb')
+
+    def test_crest(self, run):
+        # Test if the crest run works.
+        assert os.path.isfile('crest/crest_conformers.xyz')
