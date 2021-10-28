@@ -1,3 +1,5 @@
+import os.path
+
 import pytest
 from pkg_resources import resource_filename
 import configparser
@@ -17,4 +19,4 @@ class TestGenerate_conformers():
 
     def test_opt(self):
         # Test if the initial xtb optimisation works.
-        pass
+        assert os.path.isfile(resource_filename(__name__,'xtbopt.pdb'))
