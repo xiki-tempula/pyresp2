@@ -21,7 +21,7 @@ def _check_charge(mol, charge):
 def generate_conformers(mol, config):
     charge = config['molecule']['charge']
     base, ext = os.path.splitext(mol)
-    if not ext in ['.xyz', '.pbd']:
+    if not ext in ['.xyz', '.pdb']:
         raise ValueError('Only pdb and xyz files are supported. Current '
                          'extension {}.'.format(ext))
     # Sanity check
