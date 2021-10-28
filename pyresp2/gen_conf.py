@@ -26,20 +26,36 @@ def generate_conformers(mol, config):
                          'extension {}.'.format(ext))
     # Sanity check
     _check_charge(mol, charge)
+
     os.makedirs('crest', exist_ok=True)
     # Call xtb to do an initial round of optimisation
-    with open('pyresp2_0_xtb_opt.log', 'w') as f:
-        cmd = '{xtb} {mol} --opt --aplb h2o --parallel {n_proc} --namespace crest/opt'.format(
+    with open('pyresp2_0_xtb_opt.log', 'a+') as f:
+        cmd = '{xtb} {mol} --opt --alpb h2o --parallel {n_proc} ' \
+              '--namespace crest/opt --chrg {c}'.format(
             xtb=config['bin_path']['xtb'], mol=mol,
-            n_proc=config['global']['n_proc'])
+            n_proc=config['global']['n_proc'], c=config['molecule']['charge'])
         f.write('''The initial xtb optimisation input is:
 ==============================================================================
 {}
 ==============================================================================
 The initial xtb optimisation output is:
 '''.format(cmd))
-        subprocess.call(cmd, shell=True, stdout=f,
-            stderr=subprocess.STDOUT)
-    with open('pyresp2_0_xtb_opt.log', 'r') as f:
-        print(f.read())
+    with open('pyresp2_0_xtb_opt.log', 'a+') as f:
+        subprocess.call(cmd, shell=True, stdout=f, stderr=f)
+
+    with open('pyresp2_1_crest.log', 'a+') as f:
+        cmd = '{crest} {mol} -aplb h2o -T {n_proc} -chrg {c} ' \
+              '--scratch {outdir}'.format(
+            crest=config['bin_path']['crest'], mol='crest/opt.xtbopt.pdb',
+            n_proc=config['global']['n_proc'], c=config['molecule']['charge'],
+            outdir='crest')
+        f.write('''The crest conformational search input is:
+    ==============================================================================
+    {}
+    ==============================================================================
+    The crest conformational search output is:
+    '''.format(cmd))
+
+    with open('pyresp2_1_crest.log', 'a+') as f:
+        subprocess.call(cmd, shell=True, stdout=f, stderr=f)
 
