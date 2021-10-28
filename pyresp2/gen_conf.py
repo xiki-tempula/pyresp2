@@ -51,7 +51,7 @@ The initial xtb optimisation output is:
               '{additional}'.format(
             crest=config['bin_path']['crest'], mol='crest/crest_in.pdb',
             n_proc=config['global']['n_proc'], c=config['molecule']['charge'],
-            level=config['crest']['additional'])
+            additional=config['crest']['additional'])
         f.write('''The crest conformational search input is:
     ==============================================================================
     {}
