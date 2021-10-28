@@ -1,7 +1,9 @@
 import os
+import shutil
 import subprocess
 import MDAnalysis
 import numpy as np
+import shutil
 
 def _check_charge(mol, charge):
     # Check the total charge of the molecule.
@@ -43,10 +45,11 @@ The initial xtb optimisation output is:
     with open('pyresp2_0_xtb_opt.log', 'a+') as f:
         subprocess.call(cmd, shell=True, stdout=f, stderr=f)
 
+    shutil.copy('crest/opt.xtbopt.pdb', 'crest/crest_in.pdb')
     with open('pyresp2_1_crest.log', 'a+') as f:
         cmd = '{crest} {mol} -aplb h2o -T {n_proc} -chrg {c} ' \
               '--scratch {outdir} -{level}'.format(
-            crest=config['bin_path']['crest'], mol='crest/opt.xtbopt.pdb',
+            crest=config['bin_path']['crest'], mol='crest/crest_in.pdb',
             n_proc=config['global']['n_proc'], c=config['molecule']['charge'],
             outdir='crest', level=config['gfn']['level'])
         f.write('''The crest conformational search input is:
