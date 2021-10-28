@@ -5,7 +5,12 @@ pyRESP2
 [![codecov](https://codecov.io/gh/REPLACE_WITH_OWNER_ACCOUNT/pyRESP2/branch/master/graph/badge.svg)](https://codecov.io/gh/REPLACE_WITH_OWNER_ACCOUNT/pyRESP2/branch/master)
 
 
-RESP2 charge derviartion based on conformational ensembles
+RESP2 charge derviartion based on conformational ensembles.
+This package will be using xtb and crest, which could be easily installed via
+conda.
+
+conda install -c conda-forge xtb
+conda install -c conda-forge crest
 
 ### Copyright
 

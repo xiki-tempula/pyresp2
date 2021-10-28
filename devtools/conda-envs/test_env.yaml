@@ -13,6 +13,8 @@ dependencies:
   - pytest
   - pytest-cov
   - codecov
+  - xtb
+  - crest
 
     # Pip-only installs
   #- pip:
