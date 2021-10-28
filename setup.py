@@ -42,11 +42,11 @@ setup(
     include_package_data=True,
 
     # Allows `setup.py test` to work correctly with pytest
-    setup_requires=['MDAnalysis'] + pytest_runner,
+    setup_requires=[ ] + pytest_runner,
 
     # Additional entries you may want simply uncomment the lines you want and fill in the data
     # url='http://www.my_package.com',  # Website
-    # install_requires=[],              # Required packages, pulls from pip if needed; do not use for Conda deployment
+    install_requires=['MDAnalysis',],              # Required packages, pulls from pip if needed; do not use for Conda deployment
     platforms=['Linux',
                'Mac OS-X',],            # Valid platforms your code works on, adjust to your flavor
     python_requires=">=3.7",          # Python version restrictions
