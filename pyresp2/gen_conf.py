@@ -28,7 +28,7 @@ def generate_conformers(mol, config):
     _check_charge(mol, charge)
     os.makedirs('crest', exist_ok=True)
     # Call xtb to do an initial round of optimisation
-    with open('crest/initial_opt.log', 'w') as f:
+    with open('pyresp2_0_xtb_opt.log', 'w') as f:
         cmd = '{xtb} {mol} --opt --aplb h2o --parallel {n_proc} --namespace crest/opt'.format(
             xtb=config['bin_path']['xtb'], mol=mol,
             n_proc=config['global']['n_proc'])
@@ -40,3 +40,6 @@ The initial xtb optimisation output is:
 '''.format(cmd))
         subprocess.call(cmd, shell=True, stdout=f,
             stderr=subprocess.STDOUT)
+    with open('pyresp2_0_xtb_opt.log', 'r') as f:
+        print(f.read())
+
