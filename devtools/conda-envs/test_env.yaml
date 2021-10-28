@@ -15,6 +15,7 @@ dependencies:
   - codecov
   - xtb
   - crest
+  - MDAnalysis
 
     # Pip-only installs
   #- pip:
