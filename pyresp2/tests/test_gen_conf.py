@@ -13,7 +13,7 @@ class TestGenerate_conformers():
         config = configparser.ConfigParser(inline_comment_prefixes="#")
         config.read(resource_filename(__name__,
                                               '../default.ini'))
-        config['gfn']['level'] = 'gff'
+        config['crest']['additional'] = '-gff'
         generate_conformers(resource_filename(__name__,
                                               'test_data/butane.pdb'),
                             config)
