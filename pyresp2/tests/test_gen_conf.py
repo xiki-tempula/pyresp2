@@ -11,6 +11,7 @@ class TestGenerate_conformers():
     @pytest.fixture(scope='class')
     def run():
         config = configparser.ConfigParser(inline_comment_prefixes="#")
+        config['gfn']['level'] = 'gff'
         config.read(resource_filename(__name__,
                                               '../default.ini'))
         generate_conformers(resource_filename(__name__,
