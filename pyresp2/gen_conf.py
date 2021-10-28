@@ -48,10 +48,10 @@ The initial xtb optimisation output is:
     shutil.copy('crest/opt.xtbopt.pdb', 'crest/crest_in.pdb')
     with open('pyresp2_1_crest.log', 'a+') as f:
         cmd = '{crest} {mol} -aplb h2o -T {n_proc} -chrg {c} ' \
-              '--scratch {outdir} -{level}'.format(
+              '{additional}'.format(
             crest=config['bin_path']['crest'], mol='crest/crest_in.pdb',
             n_proc=config['global']['n_proc'], c=config['molecule']['charge'],
-            outdir='crest', level=config['gfn']['level'])
+            level=config['crest']['additional'])
         f.write('''The crest conformational search input is:
     ==============================================================================
     {}
