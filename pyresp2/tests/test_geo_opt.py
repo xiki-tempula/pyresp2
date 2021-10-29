@@ -1,4 +1,5 @@
 import os.path
+import shutil
 
 import pytest
 import configparser
@@ -23,9 +24,12 @@ class TestGen_opt():
     def test_files(self, run):
         for i in range(21):
             assert os.path.isfile('opt/opt_{}.inp'.format(i))
+        shutil.rmtree('opt')
 
 def test_read_opt(config):
     os.symlink(resource_filename(__name__,'test_data'), 'opt')
     read_opt(config)
     for i in range(5):
         assert os.path.isfile('energy/opt_{}.xyz'.format(i))
+    os.rmdir('opt')
+    shutil.rmtree('energy')

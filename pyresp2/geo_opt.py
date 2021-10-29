@@ -41,6 +41,7 @@ def read_opt(config):
     file_list = glob(join('opt', '*' + config['opt']['out_extension']))
     with open('pyresp2_2_opt.log', 'a+') as f:
         f.write('Files detected: \n{}'.format('\n'.join(file_list)))
+    energy_list = []
     for file in file_list:
         with open(file, 'r') as f:
             txt = f.read()
@@ -56,41 +57,46 @@ def read_opt(config):
                 f.write('Read file: {} Energy: {} Min: {}\n'.format(file,
                                                                     energy,
                                                                     min_energy))
+            energy_list.append((file, energy))
         else:
             with open('pyresp2_2_opt.log', 'a+') as f:
                 f.write('Error reading file: {}\n'.format(file))
     with open('pyresp2_2_opt.log', 'a+') as f:
+        f.write('A total of {} structures and the energy read in.\n'.format(
+            len(energy_list)))
         f.write('Mininum energy {} hatree with energy cap of {} '
                 'kcal/mol\n'.format(min_energy, config['opt']['energy_cap']))
         f.write('Find the distinct conformer over the RMSD cap of {} '
                 'A.\n'.format(config['opt']['rmsd_cap']))
+
     os.makedirs('energy', exist_ok=True)
+    energy_list = sorted(energy_list, key=lambda x: x[1])
     universe_list = []
     count = 0
-    for file in file_list:
-        with open(file, 'r') as f:
-            txt = f.read()
-        if energy_text in txt:
-            lines = txt.split('\n')
-            energy = 0
-            for line in lines:
-                if energy_text in line:
-                    energy = float(line.split()[-1])
-            if energy < min_energy + config.getfloat('opt', 'energy_cap') / 627.5:
-                # hatree to kcal/mol conversion
+    for file, energy in energy_list:
+        if energy < min_energy + config.getfloat('opt', 'energy_cap') / 627.5:
+            # hatree to kcal/mol conversion
+            with open('pyresp2_2_opt.log', 'a+') as f:
+                f.write('Found conformer within the energy cap: {}\n'.format(
+                    file))
+            base, ext = os.path.splitext(file)
+            u = mda.Universe('{}.xyz'.format(base))
+            for ref in universe_list:
+                old_rmsd, new_rmsd = alignto(u, ref, select='not name H*')
+                if new_rmsd < config.getfloat('opt', 'rmsd_cap'):
+                    break
+            else:
                 with open('pyresp2_2_opt.log', 'a+') as f:
-                    f.write('Found conformer with the energy cap: {}\n'.format(file))
-                base, ext = os.path.splitext(file)
-                u = mda.Universe('{}.xyz'.format(base))
-                for ref in universe_list:
-                    old_rmsd, new_rmsd = alignto(u, ref, select='not name H*')
-                    if new_rmsd < config.getfloat('opt', 'rmsd_cap'):
-                        break
-                else:
-                    with open('pyresp2_2_opt.log', 'a+') as f:
-                        f.write(
-                            'Conformer larger than RMSD cap copy to energy/opt_{}.xyz\n'.format(count))
-                    universe_list.append(u)
-                    shutil.copy2('{}.xyz'.format(base),
-                                 'energy/opt_{}.xyz'.format(count))
-                    count += 1
+                    f.write(
+                        'Conformer larger than RMSD cap copy to energy/opt_{}.xyz\n'.format(count))
+                universe_list.append(u)
+                shutil.copy2('{}.xyz'.format(base),
+                             'energy/opt_{}.xyz'.format(count))
+                count += 1
+        if count > config.getint('opt', 'max_conf'):
+            with open('pyresp2_2_opt.log', 'a+') as f:
+                f.write(
+                    'Maxinum number of conformer ({}) reached. '
+                    'aborting.\n'.format(
+                        config.getint('opt', 'max_conf')))
+            break
