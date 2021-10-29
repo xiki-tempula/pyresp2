@@ -31,5 +31,5 @@ def test_read_opt(config):
     read_opt(config)
     for i in range(5):
         assert os.path.isfile('energy/opt_{}.xyz'.format(i))
-    os.rmdir('opt')
+    os.unlink('opt')
     shutil.rmtree('energy')
