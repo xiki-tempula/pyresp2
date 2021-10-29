@@ -31,11 +31,11 @@ def generate_conformers(mol, config):
 
     os.makedirs('crest', exist_ok=True)
     # Call xtb to do an initial round of optimisation
-    with open('pyresp2_0_xtb_opt.log', 'a+') as f:
+    with open('pyresp2_0_xtb_opt.log', 'w') as f:
         cmd = '{xtb} {mol} --opt --alpb h2o --parallel {n_proc} ' \
               '--namespace crest/opt --chrg {c}'.format(
             xtb=config['bin_path']['xtb'], mol=mol,
-            n_proc=config['global']['n_proc'], c=config['molecule']['charge'])
+            n_proc=config['crest']['n_proc'], c=config['molecule']['charge'])
         f.write('''The initial xtb optimisation input is:
 ==============================================================================
 {}
@@ -46,17 +46,17 @@ The initial xtb optimisation output is:
         subprocess.call(cmd, shell=True, stdout=f, stderr=f)
 
     shutil.copy('crest/opt.xtbopt.pdb', 'crest/crest_in.pdb')
-    with open('pyresp2_1_crest.log', 'a+') as f:
+    with open('pyresp2_1_crest.log', 'w') as f:
         cmd = '{crest} {mol} -aplb h2o -T {n_proc} -chrg {c} ' \
               '{additional}'.format(
             crest=config['bin_path']['crest'], mol='crest/crest_in.pdb',
-            n_proc=config['global']['n_proc'], c=config['molecule']['charge'],
+            n_proc=config['crest']['n_proc'], c=config['molecule']['charge'],
             additional=config['crest']['additional'])
         f.write('''The crest conformational search input is:
-    ==============================================================================
-    {}
-    ==============================================================================
-    The crest conformational search output is:
+==============================================================================
+{}
+==============================================================================
+The crest conformational search output is:
     '''.format(cmd))
 
     with open('pyresp2_1_crest.log', 'a+') as f:
