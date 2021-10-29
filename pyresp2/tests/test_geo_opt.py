@@ -4,7 +4,7 @@ import pytest
 import configparser
 from pkg_resources import resource_filename
 
-from pyresp2.opt import gen_opt, read_opt
+from pyresp2.geo_opt import gen_opt, read_opt
 
 @pytest.fixture(scope='class')
 def config():
@@ -24,7 +24,7 @@ class TestGen_opt():
         for i in range(21):
             assert os.path.isfile('opt/opt_{}.inp'.format(i))
 
-def test_read(config):
+def test_read_opt(config):
     os.symlink(resource_filename(__name__,'test_data'), 'opt')
     read_opt(config)
     for i in range(5):
