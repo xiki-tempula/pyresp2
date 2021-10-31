@@ -30,6 +30,6 @@ def test_read_opt(config):
     os.symlink(resource_filename(__name__,'test_data'), 'opt')
     read_opt(config)
     for i in range(5):
-        assert os.path.isfile('energy/opt_{}.xyz'.format(i))
+        assert os.path.isfile('energy/sp_{}.xyz'.format(i))
     os.unlink('opt')
     shutil.rmtree('energy')

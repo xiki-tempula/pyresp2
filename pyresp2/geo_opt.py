@@ -91,7 +91,7 @@ def read_opt(config):
                         'Conformer larger than RMSD cap copy to energy/opt_{}.xyz\n'.format(count))
                 universe_list.append(u)
                 shutil.copy2('{}.xyz'.format(base),
-                             'energy/opt_{}.xyz'.format(count))
+                             'energy/sp_{}.xyz'.format(count))
                 count += 1
         if count > config.getint('opt', 'max_conf'):
             with open('pyresp2_2_opt.log', 'a+') as f:
