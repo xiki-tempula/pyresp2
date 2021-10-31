@@ -1,0 +1,7 @@
+7 // Population analysis and calculation of atomic charges
+18 // Restrained ElectroStatic Potential (RESP) atomic charge
+-1 // Load list of conformer and weights from external file
+conflist.txt
+1 // Start standard two-stage RESP fitting calculation
+
+
