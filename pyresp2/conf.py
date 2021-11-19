@@ -21,20 +21,22 @@ def _check_charge(mol, charge):
         pass
 
 def generate_conformers(mol, config):
-    charge = config['molecule']['charge']
     base, ext = os.path.splitext(mol)
-    if not ext in ['.xyz', '.pdb']:
-        raise ValueError('Only pdb and xyz files are supported. Current '
-                         'extension {}.'.format(ext))
+    
     # Sanity check
+    charge = config['molecule']['charge']
     _check_charge(mol, charge)
 
     os.makedirs('crest', exist_ok=True)
+    u = MDAnalysis.Universe(mol)
+    u.atoms.write('crest/start.pdb')
+    charge = config['molecule']['charge']
+    
     # Call xtb to do an initial round of optimisation
     with open('pyresp2_0_xtb_opt.log', 'w') as f:
         cmd = '{xtb} {mol} --opt --alpb h2o --parallel {n_proc} ' \
               '--namespace crest/opt --chrg {c}'.format(
-            xtb=config['bin_path']['xtb'], mol=mol,
+            xtb=config['bin_path']['xtb'], mol='crest/start.pdb',
             n_proc=config['crest']['n_proc'], c=config['molecule']['charge'])
         f.write('''The initial xtb optimisation input is:
 ==============================================================================

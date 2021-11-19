@@ -8,7 +8,7 @@ from MDAnalysis.analysis.align import alignto
 def gen_opt(multi_xyz, config):
     os.makedirs('opt', exist_ok=True)
     u = mda.Universe(multi_xyz)
-    for i, ts in enumerate(u.trajectory):
+    for i, ts in enumerate(u.trajectory[:500]):
         pos = []
         for atom in u.atoms:
             pos.append(
